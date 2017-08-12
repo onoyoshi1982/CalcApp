@@ -6,9 +6,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
+    TextView mTextView;
     EditText mEditText1;
     EditText mEditText2;
 
@@ -17,8 +19,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        mTextView  = (TextView) findViewById(R.id.textView);
         mEditText1 = (EditText) findViewById(R.id.editText1);
-
         mEditText2 = (EditText) findViewById(R.id.editText2);
 
         Button button1 = (Button) findViewById(R.id.button1);
@@ -38,22 +40,38 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
 
-        Intent intent = new Intent(this, SecondActivity.class);
+        if (mEditText1.getText().toString().equals("") == false &&
+                mEditText2.getText().toString().equals("") == false) {
 
-        float num1 = Float.parseFloat(mEditText1.getText().toString());
-        float num2 = Float.parseFloat(mEditText2.getText().toString());
+            float num1 = Float.parseFloat(mEditText1.getText().toString());
+            float num2 = Float.parseFloat(mEditText2.getText().toString());
 
-        if (v.getId() == R.id.button1) {
-            intent.putExtra("VALUE", num1 + num2);
-        } else if (v.getId() == R.id.button2) {
-            intent.putExtra("VALUE", num1 - num2);
-        } else if (v.getId() == R.id.button3) {
-            intent.putExtra("VALUE", num1 * num2);
-        } else if (v.getId() == R.id.button4) {
-            intent.putExtra("VALUE", num1 / num2);
+            if (v.getId() == R.id.button4 && num2 == 0) {
+
+                mTextView.setText("計算できません。");
+
+            } else {
+
+                Intent intent = new Intent(this, SecondActivity.class);
+
+                if (v.getId() == R.id.button1) {
+                    intent.putExtra("VALUE", num1 + num2);
+                } else if (v.getId() == R.id.button2) {
+                    intent.putExtra("VALUE", num1 - num2);
+                } else if (v.getId() == R.id.button3) {
+                    intent.putExtra("VALUE", num1 * num2);
+                } else if (v.getId() == R.id.button4) {
+                    intent.putExtra("VALUE", num1 / num2);
+                }
+
+                startActivity(intent);
+
+            }
+
+        } else {
+
+            mTextView.setText("数値を入力してボタンを押してください！！！");
+
         }
-
-        startActivity(intent);
-
     }
 }
